@@ -1,0 +1,43 @@
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.p-36 {
+  padding: 9rem; /* Ajusta el espaciado si es necesario */
+}
+
+.max-w-3xl {
+  max-width: 768px; /* Ajusta el ancho máximo según sea necesario */
+}
+
+.table {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center; /* Asegura que el texto esté centrado en celdas de tabla si es necesario */
+}
+
+.bg-white {
+  background-color: #fff; /* Fondo blanco */
+}
+
+.dark:bg-gray-900 {
+  background-color: #1a1a1a; /* Fondo oscuro */
+}
+
+.border {
+  border: 1px solid #ccc; /* Borde gris claro */
+}
+
+.hover\:bg-gray-50:hover {
+  background-color: #f9f9f9; /* Fondo gris claro al pasar el mouse */
+}

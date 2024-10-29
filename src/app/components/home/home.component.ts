@@ -3,16 +3,12 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-sidebar',
+  selector: 'app-home',
   standalone: true,
   imports: [RouterLink,CommonModule,RouterOutlet],
-  templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css'
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.css'
 })
-export class SidebarComponent {
-isDropdown = false;
+export class HomeComponent {
 
-  toggleDropdown() {
-    this.isDropdown = !this.isDropdown;
-  }
 }

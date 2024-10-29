@@ -44,13 +44,12 @@
                 </td>
                 <td class="px-6 py-4">
                     <div class="flex items-center">
-                        <div class="h-2.5 w-2.5 rounded-full" [ngClass]="{'bg-green-500': item.status === 'Online', 'bg-red-500': item.status === 'Offline'}" me-2></div>
+                        <div class="h-2.5 w-2.5 rounded-full" [ngClass]="{'bg-green-500': item.status === 'Online', 'bg-red-500': item.status === 'Offline'}" ml-12></div>
                         {{ item.status }}
                     </div>
                 </td>
                 <td class="px-6 py-4">
-                    <!-- Modal toggle -->
-                    <a href="#" type="button" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit user</a>
+                  <button type="button" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editar</button>
                 </td>
             </tr>
           }
