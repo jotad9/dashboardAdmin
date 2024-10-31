@@ -1,53 +1,72 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import type { ModalOptions } from 'flowbite';
+import { CommonModule } from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  OnInit
+} from '@angular/core';
+import { ModalOptions } from 'flowbite';
 import { UsuarioService } from '../../services/usuario.service';
 @Component({
   selector: 'app-usuarios',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.css']
+  styleUrls: ['./usuarios.component.css'],
 })
 export class UsuariosComponent implements AfterViewInit, OnInit {
   //modal de la tabla
   $modalElement: HTMLElement | null = null;
-  private modal: any;
   usuarios: any[] = [];
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private usuarioService:UsuarioService) {}
+
+  constructor(private usuarioService: UsuarioService) {}
+
   ngOnInit(): void {
     console.log('UsuariosComponent cargado');
     this.usuarioService.getUsers().subscribe({
-      next: (response) =>{
-        this.usuarios = response,
-        console.log('Data fetched', this.usuarios)
+      next: (response) => {
+        this.usuarios = response;
       },
-      error: (error) => console.error('Error fetching data', error)
+      error: (error) => console.error('Error fetching data', error),
     });
     console.log(this.usuarios);
   }
 
   ngAfterViewInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      import('flowbite').then(({ Modal }) => {
-        this.$modalElement = document.getElementById('editUserModal');
-        if (this.$modalElement) {
-          const modalOptions: ModalOptions = {};
-          this.modal = new Modal(this.$modalElement, modalOptions);
+    //La importación dinámica carga el módulo solo cuando se necesita, en este caso, después de que la vista del componente ha sido completamente inicializada. Esto asegura que el módulo se cargue y se ejecute en el momento adecuado, cuando el DOM está completamente disponible y listo para ser manipulado.
+    import('flowbite').then(({ Modal }) => {
+      const modalElement = document.getElementById('editUserModal');
+      if (modalElement) {
+        const modalOptions: ModalOptions = {};
+        const modal = new Modal(modalElement, modalOptions);
 
-          const triggerElement = document.querySelector('[data-modal-show="editUserModal"]');
-          if (triggerElement) {
+        document.querySelectorAll('[data-modal-target="editUserModal"]')
+          .forEach((triggerElement) => {
             triggerElement.addEventListener('click', (event) => {
               event.preventDefault();
-              this.modal?.show();
+              const userIndex = (triggerElement as HTMLElement).getAttribute(
+                'data-user-index'
+              )!;
+              this.updateModalContent(userIndex);
+              modal.show();
             });
-          } else {
-            console.error('Elemento con data-modal-show="editUserModal" no encontrado');
-          }
-        } else {
-          console.error('Elemento #editUserModal no encontrado');
-        }
-      });
+          });
+      } else {
+        console.error('Elemento #editUserModal no encontrado');
+      }
+    });
+  }
+
+  updateModalContent(index: string | undefined) {
+    if (index !== undefined) {
+      const usuario = this.usuarios[parseInt(index, 10)];
+      (document.getElementById('first-name') as HTMLInputElement).value =
+        usuario.name;
+      (document.getElementById('email') as HTMLInputElement).value =
+        usuario.email;
+      (document.getElementById('phone-number') as HTMLInputElement).value =
+        usuario.phoneNumber;
+      (document.getElementById('department') as HTMLInputElement).value =
+        usuario.department;
     }
   }
 }
