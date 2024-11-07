@@ -1,6 +1,6 @@
 {
   "name": "dashboard",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -19,9 +19,10 @@
     "@angular/platform-browser-dynamic": "^18.2.9",
     "@angular/router": "^18.2.9",
     "@angular/ssr": "^18.2.9",
-    "@nguniversal/express-engine": "^16.2.0",
+    "chart.js": "^4.4.6",
     "express": "^4.18.2",
     "flowbite": "^2.5.2",
+    "ng2-charts": "^6.0.1",
     "rxjs": "~7.8.0",
     "ssr": "^6.2.82",
     "tslib": "^2.3.0",
@@ -31,7 +32,6 @@
     "@angular-devkit/build-angular": "^18.2.10",
     "@angular/cli": "^18.2.10",
     "@angular/compiler-cli": "^18.2.9",
-    "@types/express": "^4.17.17",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^18.18.0",
     "autoprefixer": "^10.4.20",
