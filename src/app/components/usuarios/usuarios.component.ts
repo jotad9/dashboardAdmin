@@ -152,11 +152,15 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
 
   opendismissModal(index: number) {
     this.selectedUser = this.usuarios[index];
-    this.dismissModal.show();
+    if (this.selectedUser && this.selectedUser.id) {
+      this.dismissModal.show();
+    } else {
+      console.error('Usuario seleccionado no tiene un ID válido');
+    }
   }
 
   despedir() {
-    if (this.selectedUser) {
+    if (this.selectedUser && this.selectedUser.id) {
       this.usuarioService.deleteUser(this.selectedUser.id).subscribe({
         next: () => {
           console.log('Usuario despedido');
