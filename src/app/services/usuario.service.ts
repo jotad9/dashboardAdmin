@@ -28,8 +28,8 @@ export class UsuarioService {
       })
     );
   }
- createUser(): Observable<any> {
-    return this.http.post<any>(this.apiUrl, {}).pipe(
+ createUser(user:any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, user).pipe(
       catchError(error => {
         console.error('Error creating user', error);
         return throwError(error);

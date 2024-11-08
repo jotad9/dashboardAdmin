@@ -21,7 +21,8 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
   usuarios: any[] = [];
   selectedUser: any = null;
   modal: any = null;
-  despedirModal: any = null;
+  dismissModal: any = null;
+  createMemberModal: any = null;
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private usuarioService: UsuarioService
@@ -37,7 +38,9 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
     });
     console.log(this.usuarios);
   }
-
+  openCreateMemberModal(): void {
+    this.createMemberModal.show();
+  }
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
       import('flowbite').then(({ Modal }) => {
@@ -46,7 +49,8 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
           const modalOptions: ModalOptions = {};
           this.modal = new Modal(modalElement, modalOptions);
 
-          document.querySelectorAll('[data-modal-target="editUserModal"]')
+          document
+            .querySelectorAll('[data-modal-target="editUserModal"]')
             .forEach((triggerElement) => {
               triggerElement.addEventListener('click', (event) => {
                 event.preventDefault();
@@ -61,12 +65,34 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
           console.error('Elemento #editUserModal no encontrado');
         }
 
-        const despedirModalElement = document.getElementById('despedirUsuarioModal');
-        if (despedirModalElement) {
+        const dismissModalElement = document.getElementById(
+          'despedirUsuarioModal'
+        );
+        if (dismissModalElement) {
           const modalOptions: ModalOptions = {};
-          this.despedirModal = new Modal(despedirModalElement, modalOptions);
+          this.dismissModal = new Modal(dismissModalElement, modalOptions);
         } else {
           console.error('Elemento #despedirUsuarioModal no encontrado');
+        }
+
+        const createMemberModalElement =
+          document.getElementById('createMemberModal');
+        if (createMemberModalElement) {
+          const modalOptions: ModalOptions = {};
+          this.createMemberModal = new Modal(
+            createMemberModalElement,
+            modalOptions
+          );
+          document
+            .querySelectorAll('[data-modal-target="createMemberModal"]')
+            .forEach((triggerElement) => {
+              triggerElement.addEventListener('click', (event) => {
+                event.preventDefault();
+                this.createMemberModal.show();
+              });
+            });
+        } else {
+          console.error('Elemento #createMemberModal no encontrado');
         }
       });
     }
@@ -76,29 +102,47 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
     if (index !== undefined) {
       const usuario = this.usuarios[parseInt(index, 10)];
       this.selectedUser = { ...usuario }; // Clonar el usuario seleccionado
-      (document.getElementById('name') as HTMLInputElement).value = usuario.nombre;
-      (document.getElementById('email') as HTMLInputElement).value = usuario.email;
-      (document.getElementById('position') as HTMLInputElement).value = usuario.position;
-      (document.getElementById('salary') as HTMLInputElement).value = usuario.salary;
-      (document.getElementById('current-password') as HTMLInputElement).value = usuario.password;
+      (document.getElementById('name') as HTMLInputElement).value =
+        usuario.nombre;
+      (document.getElementById('email') as HTMLInputElement).value =
+        usuario.email;
+      (document.getElementById('position') as HTMLInputElement).value =
+        usuario.position;
+      (document.getElementById('salary') as HTMLInputElement).value =
+        usuario.salary;
+      (document.getElementById('current-password') as HTMLInputElement).value =
+        usuario.password;
     }
   }
 
   saveUser() {
     if (this.selectedUser) {
-      this.selectedUser.nombre = (document.getElementById('name') as HTMLInputElement).value;
-      this.selectedUser.email = (document.getElementById('email') as HTMLInputElement).value;
-      this.selectedUser.position = (document.getElementById('position') as HTMLInputElement).value;
-      this.selectedUser.salary = (document.getElementById('salary') as HTMLInputElement).value;
-      this.selectedUser.password = (document.getElementById('current-password') as HTMLInputElement).value;
+      this.selectedUser.nombre = (
+        document.getElementById('name') as HTMLInputElement
+      ).value;
+      this.selectedUser.email = (
+        document.getElementById('email') as HTMLInputElement
+      ).value;
+      this.selectedUser.position = (
+        document.getElementById('position') as HTMLInputElement
+      ).value;
+      this.selectedUser.salary = (
+        document.getElementById('salary') as HTMLInputElement
+      ).value;
+      this.selectedUser.password = (
+        document.getElementById('current-password') as HTMLInputElement
+      ).value;
 
       this.usuarioService.updateUser(this.selectedUser).subscribe({
         next: (response) => {
           console.log('Usuario actualizado', response);
           // Actualizar la lista de usuarios con la información actualizada
-          const index = this.usuarios.findIndex(u => u.id === this.selectedUser.id);
+          const index = this.usuarios.findIndex(
+            (u) => u.id === this.selectedUser.id
+          );
           if (index !== -1) {
             this.usuarios[index] = this.selectedUser;
+            this.modal.hide();
           }
         },
         error: (error) => console.error('Error updating user', error),
@@ -106,9 +150,9 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
     }
   }
 
-  openDespedirModal(index: number) {
+  opendismissModal(index: number) {
     this.selectedUser = this.usuarios[index];
-    this.despedirModal.show();
+    this.dismissModal.show();
   }
 
   despedir() {
@@ -116,7 +160,9 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
       this.usuarioService.deleteUser(this.selectedUser.id).subscribe({
         next: () => {
           console.log('Usuario despedido');
-          const index = this.usuarios.findIndex(u => u.id === this.selectedUser.id);
+          const index = this.usuarios.findIndex(
+            (u) => u.id === this.selectedUser.id
+          );
           if (index !== -1) {
             this.usuarios.splice(index, 1); // Elimina el usuario del array
           }
@@ -126,10 +172,35 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
       });
     }
   }
-  closeModalEdit(){
+  closeModalEdit() {
     this.modal.hide();
   }
+  closeModalMember() {
+    this.createMemberModal.hide();
+  }
   closeModal() {
-    this.despedirModal.hide();
+    this.dismissModal.hide();
+  }
+
+  createMember() {
+    const newMember = {
+      nombre: (document.getElementById('nameM') as HTMLInputElement).value,
+      image_url: (document.getElementById('image') as HTMLInputElement).value,
+      status: (document.getElementById('status') as HTMLInputElement).value,
+      email: (document.getElementById('emailM') as HTMLInputElement).value,
+      position: (document.getElementById('positionM') as HTMLInputElement)
+        .value,
+      salary: (document.getElementById('salaryM') as HTMLInputElement).value,
+      password: (document.getElementById('new-passwordM') as HTMLInputElement)
+        .value,
+    };
+    this.usuarioService.createUser(newMember).subscribe({
+      next: (response) => {
+        console.log('Usuario creado', response);
+        this.usuarios.push(newMember);
+        this.createMemberModal.hide();
+      },
+      error: (error) => console.error('Error creating user', error),
+    });
   }
 }

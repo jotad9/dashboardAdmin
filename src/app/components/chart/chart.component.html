@@ -1,11 +1,11 @@
-<div class="flex flex-col items-center w-full max-w-screen-md p-6 pb-6 bg-white rounded-lg shadow-xl sm:p-8 mt-12">
-  <h2 class="text-xl font-bold">Productos: Gastos e Ingresos</h2>
-  <canvas baseChart
-          [datasets]="barChartData"
-          [labels]="barChartLabels"
-          [options]="barChartOptions"
-          [legend]="barChartLegend"
-          [type]="barChartType"
-          [plugins]="barChartPlugins">
-  </canvas>
+<div id="chart" class="hover:scale-105 transition duration-300 flex flex-col items-center w-full max-w-screen-xl p-6 pb-6 bg-white rounded-lg shadow-xl sm:p-9 mt-12">
+  <h2 class="text-xl font-bold">Products: Expenses and Profits</h2>
+  <apx-chart
+    [series]="chartOptions.series"
+    [chart]="chartOptions.chart"
+    [title]="chartOptions.title"
+    [xaxis]="chartOptions.xaxis"
+    [dataLabels]="chartOptions.dataLabels">
+  </apx-chart>
 </div>
+
