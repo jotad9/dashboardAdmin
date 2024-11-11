@@ -1,8 +1,8 @@
 import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ChartComponent } from './components/chart/chart.component';
 import { DashboardComponent } from "./dashboard/dashboard.component";
+import { ChartComponent } from './shared/chart/chart.component';
 @Component({
   selector: 'app-root',
   standalone: true,

@@ -3,7 +3,7 @@ import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { UsuarioService } from '../../services/usuario.service';
-import { ChartComponent } from '../chart/chart.component';
+import { ChartComponent } from '../../shared/chart/chart.component';
 
 @Component({
   selector: 'app-home',

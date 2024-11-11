@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { HomeComponent } from '../components/home/home.component';
+import { DashboardComponent } from '../dashboard/dashboard.component';
 
 export const routes: Routes = [
   {
@@ -14,14 +14,14 @@ export const routes: Routes = [
       {
         path: 'usuarios',
         loadComponent: () =>
-          import('./components/usuarios/usuarios.component').then(
+          import('../components/usuarios/usuarios.component').then(
             (m) => m.UsuariosComponent
           ),
       },
       {
         path: 'productos',
         loadComponent: () =>
-          import('./components/productos/productos.component').then(
+          import('../components/productos/productos.component').then(
             (m) => m.ProductosComponent
           ),
       },
