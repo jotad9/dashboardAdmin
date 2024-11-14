@@ -6,7 +6,7 @@ import {
   OnInit,
   PLATFORM_ID,
 } from '@angular/core';
-import { ModalOptions } from 'flowbite';
+import { Modal, ModalOptions } from 'flowbite';
 import { UsuarioService } from '../../services/usuario.service';
 @Component({
   selector: 'app-usuarios',
@@ -33,6 +33,9 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
     this.usuarioService.getUsers().subscribe({
       next: (response) => {
         this.usuarios = response;
+        setTimeout(() => {
+          this.addEventListeners();
+        }, 0);
       },
       error: (error) => console.error('Error fetching data', error),
     });
@@ -41,26 +44,27 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
   openCreateMemberModal(): void {
     this.createMemberModal.show();
   }
+  addEventListeners(): void {
+    document
+      .querySelectorAll('[data-modal-target="editUserModal"]')
+      .forEach((triggerElement) => {
+        console.log("triggerElement:", triggerElement);
+        triggerElement.addEventListener('click', (event) => {
+          event.preventDefault();
+          const userIndex = (triggerElement as HTMLElement).getAttribute('data-user-index')!;
+          console.log('Indice de usuario:', userIndex);
+          this.updateModalContent(userIndex);
+          this.modal.show();
+        });
+      });
+  }
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
-      import('flowbite').then(({ Modal }) => {
         const modalElement = document.getElementById('editUserModal');
+        console.log("editUserModal encontrado:", modalElement);
         if (modalElement) {
           const modalOptions: ModalOptions = {};
           this.modal = new Modal(modalElement, modalOptions);
-
-          document
-            .querySelectorAll('[data-modal-target="editUserModal"]')
-            .forEach((triggerElement) => {
-              triggerElement.addEventListener('click', (event) => {
-                event.preventDefault();
-                const userIndex = (triggerElement as HTMLElement).getAttribute(
-                  'data-user-index'
-                )!;
-                this.updateModalContent(userIndex);
-                this.modal.show();
-              });
-            });
         } else {
           console.error('Elemento #editUserModal no encontrado');
         }
@@ -94,7 +98,6 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
         } else {
           console.error('Elemento #createMemberModal no encontrado');
         }
-      });
     }
   }
 
@@ -102,6 +105,7 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
     if (index !== undefined) {
       const usuario = this.usuarios[parseInt(index, 10)];
       this.selectedUser = { ...usuario }; // Clonar el usuario seleccionado
+      console.log('Usuario seleccionado:', this.selectedUser);
       (document.getElementById('name') as HTMLInputElement).value =
         usuario.nombre;
       (document.getElementById('email') as HTMLInputElement).value =
@@ -110,8 +114,6 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
         usuario.position;
       (document.getElementById('salary') as HTMLInputElement).value =
         usuario.salary;
-      (document.getElementById('current-password') as HTMLInputElement).value =
-        usuario.password;
     }
   }
 

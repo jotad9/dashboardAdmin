@@ -1,4 +1,4 @@
-<div id="chart" class="hover:scale-105 transition duration-300 flex flex-col items-center w-full max-w-screen-xl p-6 pb-6 bg-white rounded-lg shadow-xl sm:p-9 mt-12">
+<div *ngIf="dataLoaded" id="chart" class="hover:scale-105 transition duration-300 flex flex-col items-center w-full max-w-screen-xl p-6 pb-6 bg-white rounded-lg shadow-xl sm:p-9 mt-12">
   <h2 class="text-xl font-bold">Products: Expenses and Profits</h2>
   <apx-chart
     [series]="chartOptions.series"

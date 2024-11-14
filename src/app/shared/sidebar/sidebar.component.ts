@@ -15,4 +15,8 @@ isDropdown = false;
   toggleDropdown() {
     this.isDropdown = !this.isDropdown;
   }
+
+  loginAgain(){
+    localStorage.removeItem('token');
+  }
 }
