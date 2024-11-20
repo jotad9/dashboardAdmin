@@ -16,7 +16,6 @@ export class HomeComponent implements OnInit {
   usuarios: any[] = [];
   gastos: number = 0;
   productos: any[] = [];
-  productos1: any[] = [];
   stock:number = 0;
   profits:number = 0;
   net_profits:number = 0;

@@ -1,9 +1,9 @@
 <div class="flex flex-row mt-5">
-  <div *ngIf="dataLoaded" id="chart-container" class="hover:scale-105 transition duration-300 flex flex-col items-center w-1/2 p-6 pb-6 bg-white rounded-lg shadow-xl">
+  <div  id="chart-container" class="hover:scale-105 transition duration-300 flex flex-col items-center w-1/2 p-6 pb-6 bg-white rounded-lg shadow-xl">
     <h2 class="text-xl font-bold">stock distribution</h2>
-    <div id="chart"></div>
+    <div id="chart-pie"></div>
   </div>
-  <div *ngIf="dataLoaded" id="donut-chart-container" class="hover:scale-105 transition duration-300 flex flex-col items-center w-1/2 p-6 pb-6 bg-white rounded-lg shadow-xl ml-5">
+  <div  id="donut-chart-container" class="hover:scale-105 transition duration-300 flex flex-col items-center w-1/2 p-6 pb-6 bg-white rounded-lg shadow-xl ml-5">
     <h2 class="text-xl font-bold">Distribución de Ingresos</h2>
     <div id="donut-chart"></div>
   </div>

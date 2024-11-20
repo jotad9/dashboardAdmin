@@ -38,8 +38,8 @@ export class ProductService {
     );
   }
 
-  createProduct(): Observable<any>{
-    return this.http.post<any>(this.apiUrl, {}).pipe(
+  createProduct(product:any): Observable<any>{
+    return this.http.post<any>(this.apiUrl, product).pipe(
       catchError(error => {
         console.error('Error creating product', error);
         return error;

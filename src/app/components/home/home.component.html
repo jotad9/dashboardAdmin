@@ -62,15 +62,17 @@
     </div>
   </a>
 </div>
-<app-chart
-    *ngIf="productosLoaded"
-    class="col-span-12 sm:col-span-12 xl:col-span-12 mt-6"
-    [productos]="productos"
-  ></app-chart>
+@if (productosLoaded) {
+  <app-chart
+  class="col-span-12 sm:col-span-12 xl:col-span-12 mt-6"
+  [productos]="productos"
+></app-chart>
 
-  <app-chart-pie
-    [productos1]="productos"
-  ></app-chart-pie>
+<app-chart-pie
+  [productos]="productos"
+></app-chart-pie>
+}
+
 
 
 

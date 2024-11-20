@@ -5,15 +5,16 @@ import {
   Inject,
   OnInit,
   PLATFORM_ID,
+  ViewChild,
 } from '@angular/core';
 import { Modal, ModalOptions } from 'flowbite';
 import { UsuarioService } from '../../services/usuario.service';
+import { CreateMemberModalComponent } from './create-member-modal/create-member-modal.component';
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CreateMemberModalComponent],
   templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.css'],
 })
 export class UsuariosComponent implements AfterViewInit, OnInit {
   //modal de la tabla
@@ -22,7 +23,9 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
   selectedUser: any = null;
   modal: any = null;
   dismissModal: any = null;
-  createMemberModal: any = null;
+  @ViewChild(CreateMemberModalComponent)
+  createMemberModalComponent!: CreateMemberModalComponent;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private usuarioService: UsuarioService
@@ -41,17 +44,16 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
     });
     console.log(this.usuarios);
   }
-  openCreateMemberModal(): void {
-    this.createMemberModal.show();
-  }
+
   addEventListeners(): void {
     document
       .querySelectorAll('[data-modal-target="editUserModal"]')
       .forEach((triggerElement) => {
-        console.log("triggerElement:", triggerElement);
         triggerElement.addEventListener('click', (event) => {
           event.preventDefault();
-          const userIndex = (triggerElement as HTMLElement).getAttribute('data-user-index')!;
+          const userIndex = (triggerElement as HTMLElement).getAttribute(
+            'data-user-index'
+          )!;
           console.log('Indice de usuario:', userIndex);
           this.updateModalContent(userIndex);
           this.modal.show();
@@ -60,44 +62,24 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
   }
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
-        const modalElement = document.getElementById('editUserModal');
-        console.log("editUserModal encontrado:", modalElement);
-        if (modalElement) {
-          const modalOptions: ModalOptions = {};
-          this.modal = new Modal(modalElement, modalOptions);
-        } else {
-          console.error('Elemento #editUserModal no encontrado');
-        }
+      const modalElement = document.getElementById('editUserModal');
+      console.log('editUserModal encontrado:', modalElement);
+      if (modalElement) {
+        const modalOptions: ModalOptions = {};
+        this.modal = new Modal(modalElement, modalOptions);
+      } else {
+        console.error('Elemento #editUserModal no encontrado');
+      }
 
-        const dismissModalElement = document.getElementById(
-          'despedirUsuarioModal'
-        );
-        if (dismissModalElement) {
-          const modalOptions: ModalOptions = {};
-          this.dismissModal = new Modal(dismissModalElement, modalOptions);
-        } else {
-          console.error('Elemento #despedirUsuarioModal no encontrado');
-        }
-
-        const createMemberModalElement =
-          document.getElementById('createMemberModal');
-        if (createMemberModalElement) {
-          const modalOptions: ModalOptions = {};
-          this.createMemberModal = new Modal(
-            createMemberModalElement,
-            modalOptions
-          );
-          document
-            .querySelectorAll('[data-modal-target="createMemberModal"]')
-            .forEach((triggerElement) => {
-              triggerElement.addEventListener('click', (event) => {
-                event.preventDefault();
-                this.createMemberModal.show();
-              });
-            });
-        } else {
-          console.error('Elemento #createMemberModal no encontrado');
-        }
+      const dismissModalElement = document.getElementById(
+        'despedirUsuarioModal'
+      );
+      if (dismissModalElement) {
+        const modalOptions: ModalOptions = {};
+        this.dismissModal = new Modal(dismissModalElement, modalOptions);
+      } else {
+        console.error('Elemento #despedirUsuarioModal no encontrado');
+      }
     }
   }
 
@@ -181,32 +163,34 @@ export class UsuariosComponent implements AfterViewInit, OnInit {
   closeModalEdit() {
     this.modal.hide();
   }
-  closeModalMember() {
-    this.createMemberModal.hide();
-  }
+
   closeModal() {
     this.dismissModal.hide();
   }
 
-  createMember() {
-    const newMember = {
-      nombre: (document.getElementById('nameM') as HTMLInputElement).value,
-      image_url: (document.getElementById('image') as HTMLInputElement).value,
-      status: (document.getElementById('status') as HTMLInputElement).value,
-      email: (document.getElementById('emailM') as HTMLInputElement).value,
-      position: (document.getElementById('positionM') as HTMLInputElement)
-        .value,
-      salary: (document.getElementById('salaryM') as HTMLInputElement).value,
-      password: (document.getElementById('new-passwordM') as HTMLInputElement)
-        .value,
-    };
-    this.usuarioService.createUser(newMember).subscribe({
+  createMember(member: any): void {
+    this.usuarioService.createUser(member).subscribe({
       next: (response) => {
         console.log('Usuario creado', response);
-        this.usuarios.push(newMember);
-        this.createMemberModal.hide();
+        this.usuarios.push(response);
       },
       error: (error) => console.error('Error creating user', error),
     });
   }
+  openModalMember(): void {
+    if (this.createMemberModalComponent) {
+      this.createMemberModalComponent.showModal();
+    } else {
+      console.error('createMemberModalComponent no inicializado');
+    }
+  }
+
+  closeModalMember(): void {
+    if (this.createMemberModalComponent) {
+      this.createMemberModalComponent.closeModalMember();
+    } else {
+      console.error('createMemberModalComponent no inicializado');
+    }
+  }
+
 }
