@@ -31,10 +31,12 @@ export type ChartOptions = {
   styleUrls: ['./chart-pie.component.css'],
 })
 export class ChartPieComponent implements OnInit {
-  public options!: Partial<ChartOptions>;
+  public optionsLeft!: Partial<ChartOptions>;
+  public optionsRight!: Partial<ChartOptions>;
   @Input() productos: any[] = [];
   public dataLoaded: boolean = false;
-  private chart: ApexCharts | undefined;
+  private chartLeft: ApexCharts | undefined;
+  private chartRight: ApexCharts | undefined;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -44,6 +46,7 @@ export class ChartPieComponent implements OnInit {
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.initializeChartWithData();
+      this.initializeChartWithDataRight();
       this.cdr.detectChanges();
       console.log('Productos:', this.productos);
     }
@@ -53,7 +56,7 @@ export class ChartPieComponent implements OnInit {
     const seriesData = this.productos.map((product) => product.quantity);
     const labelsData = this.productos.map((product) => product.product);
 
-    this.options = {
+    this.optionsLeft = {
       series: seriesData,
       chart: {
         type: 'donut',
@@ -82,21 +85,76 @@ export class ChartPieComponent implements OnInit {
       ],
     };
 
-    this.renderChart();
+    this.renderChartLeft();
   }
 
-  private renderChart(): void {
+  private initializeChartWithDataRight(): void {
+    const seriesData = this.productos.map((product) => product.sold);
+    const labelsData = this.productos.map((product) => product.product);
+
+    this.optionsRight = {
+      series: seriesData,
+      chart: {
+        type: 'donut',
+        width: 400,
+        height: 200,
+      },
+      labels: labelsData,
+      dataLabels: {
+        enabled: true,
+        style: {
+          fontWeight: 'bold',
+        },
+      },
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 300,
+            },
+            legend: {
+              position: 'bottom',
+            },
+          },
+        },
+      ],
+    };
+
+    this.renderChartRight();
+  }
+  private renderChartLeft(): void {
     import('apexcharts')
       .then((ApexChartsModule) => {
         const ApexCharts = ApexChartsModule.default;
-        if (this.chart) {
-          this.chart.destroy();
+        if (this.chartLeft) {
+          this.chartLeft.destroy();
         }
-        this.chart = new ApexCharts(
-          document.querySelector('#chart-pie'),
-          this.options
+        this.chartLeft = new ApexCharts(
+          document.querySelector('#chart-pieLeft'),
+          this.optionsLeft
         );
-        this.chart.render().catch((error: any) => {
+        this.chartLeft.render().catch((error: any) => {
+          console.error('Error rendering chart:', error);
+        });
+      })
+      .catch((error: any) => {
+        console.error('Error loading ApexCharts:', error);
+      });
+  }
+
+  private renderChartRight(): void {
+    import('apexcharts')
+      .then((ApexChartsModule) => {
+        const ApexCharts = ApexChartsModule.default;
+        if (this.chartRight) {
+          this.chartRight.destroy();
+        }
+        this.chartRight = new ApexCharts(
+          document.querySelector('#chart-pieRight'),
+          this.optionsRight
+        );
+        this.chartRight.render().catch((error: any) => {
           console.error('Error rendering chart:', error);
         });
       })
