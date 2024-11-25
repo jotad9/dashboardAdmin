@@ -7,14 +7,14 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8080/api/auth';
+  private readonly baseUrl = 'http://localhost:8080/api/auth';
 
   constructor(
-    private http: HttpClient,
+    private readonly http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
-  login(credentials: { nombre: string, password: string }): Observable<any> {
+  login(credentials: { name_admin: string, pass: string }): Observable<any> {
     console.log('Enviando solicitud de login', credentials);
     return this.http.post<any>(`${this.baseUrl}/login`, credentials).pipe(
       map((response) => {
@@ -32,7 +32,7 @@ export class AuthService {
 
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('token'); // Elimina el token del localStorage
+      localStorage.removeItem('token');
     }
   }
 
@@ -44,7 +44,7 @@ export class AuthService {
   }
 
   public isAuthenticated(): boolean {
-    // Verifica si hay un token en el localStorage
+    // Check if there's a token on the localStorage
     return !!this.token;
   }
 }

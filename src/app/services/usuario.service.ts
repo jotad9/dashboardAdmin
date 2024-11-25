@@ -7,9 +7,9 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class UsuarioService {
-  private apiUrl = 'http://localhost:8080/api/users';
+  private readonly apiUrl = 'http://localhost:8080/api/users';
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   getUsers(): Observable<any> {
     return this.http.get<any>(this.apiUrl).pipe(

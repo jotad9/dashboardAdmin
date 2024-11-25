@@ -11,8 +11,8 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  nombre: string = '';
-  password: string = '';
+  name_admin: string = '';
+  pass: string = '';
 
   constructor(private authService: AuthService, private router: Router) {
     if (this.authService.isAuthenticated()) {
@@ -20,9 +20,9 @@ export class LoginComponent {
     }
   }
   login(): void {
-    console.log('Intentando iniciar sesión con', this.nombre, this.password);
+    console.log('Intentando iniciar sesión con', this.name_admin, this.pass);
     this.authService
-      .login({ nombre: this.nombre, password: this.password })
+      .login({ name_admin: this.name_admin, pass: this.pass })
       .subscribe({
         next: (response) => {
           console.log('Inicio de sesión exitoso', response);
@@ -31,4 +31,5 @@ export class LoginComponent {
         error: (error) => console.error('Error de autenticación', error),
       });
   }
+
 }
