@@ -29,6 +29,21 @@ export class AuthService {
       })
     );
   }
+  register(credentials: { name_admin: string, name_business: string, email: string, pass: string }): Observable<any> {
+    console.log('Enviando solicitud de registro', credentials);
+    return this.http.post<any>(`${this.baseUrl}/register`, credentials).pipe(
+      map((response) => {
+        console.log('Respuesta del servidor', response);
+        if (response && response.accessToken) {
+          if (isPlatformBrowser(this.platformId)) {
+            console.log('Token recibido en authService', response.accessToken);
+            localStorage.setItem('token', response.accessToken);
+          }
+        }
+        return response;
+      })
+    );
+  }
 
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {

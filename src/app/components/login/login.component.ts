@@ -15,9 +15,7 @@ export class LoginComponent {
   pass: string = '';
 
   constructor(private authService: AuthService, private router: Router) {
-    if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/dashboard']);
-    }
+    this.navigateToDashboard();
   }
   login(): void {
     console.log('Intentando iniciar sesión con', this.name_admin, this.pass);
@@ -26,10 +24,14 @@ export class LoginComponent {
       .subscribe({
         next: (response) => {
           console.log('Inicio de sesión exitoso', response);
-          this.router.navigate(['dashboard']);
+          this.navigateToDashboard()
         },
         error: (error) => console.error('Error de autenticación', error),
       });
   }
-
+  navigateToDashboard():void{
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/dashboard']);
+    }
+  }
 }

@@ -40,6 +40,6 @@ export class UsuarioService {
     if (error.status === 403) {
       console.error('Access forbidden: Invalid or missing token');
     }
-    return throwError('Error fetching data');
+    return throwError(() => new Error('Error fetching user data'));
   }
 }

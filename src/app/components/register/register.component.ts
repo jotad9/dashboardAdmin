@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AdminService } from '../../services/admin.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../core/services/auth.service';
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -10,10 +11,10 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
-  createAdminForm: FormGroup;
+  registerForm: FormGroup;
   private admins: any[] = [];
-  constructor(private adminService: AdminService, private fb: FormBuilder) {
-    this.createAdminForm = this.fb.group({
+  constructor(private authService: AuthService, private fb: FormBuilder, private router: Router) {
+    this.registerForm = this.fb.group({
       name_admin: ['', Validators.required],
       name_business: ['', Validators.required],
       email: ['', Validators.required],
@@ -21,18 +22,18 @@ export class RegisterComponent {
     });
   }
 
-  createAdmin(): void {
-    if (this.createAdminForm.valid) {
-      const admin = this.createAdminForm.value;
-      this.adminService.createAdmin(admin).subscribe({
+  register(): void {
+    if (this.registerForm.valid) {
+      const credentials = this.registerForm.value;
+      this.authService.register(credentials).subscribe({
         next: (response) => {
-          console.log('Admin create', response);
-          this.admins.push(admin);
+          console.log('Registro exitoso', response);
+          this.router.navigate(['/dashboard']);
         },
-        error: (error) => console.error('Error to create Admin', error)
-      })
+        error: (error) => console.error('Error al registrar', error)
+      });
     } else {
-      console.error('Form not valid');
+      console.error('Formulario inválido');
     }
   }
 }
